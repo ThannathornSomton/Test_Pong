@@ -6,7 +6,7 @@ void setup(){
   frameRate(60);
   size(800,600);
   textSize(32);
-  ball = new Ball(24,2,0);
+  ball = new Ball(24,-5,0);
   Game = new PongGame();
   paddle = new Paddle[paddle_quantity];
   for(int i = 0; i < paddle_quantity; i++){
@@ -21,18 +21,43 @@ void draw(){
 
 class Ball{
 
-  float positionX,positionY,size,direction,speed;
+  float positionX,positionY,size,speedX,speedY;
   
   Ball(float a,float b,float c){
     positionX = width/2;
     positionY = height/2;
     size = a;
-    speed = b;
-    direction = c;
+    speedX = b;
+    speedY = c;
   }
    
   public void draw(){
-   circle(positionX,positionY,size);
+    this.move();
+    this.bounce();
+    circle(positionX,positionY,size);
+  }
+  
+  public void move(){
+    positionX += speedX;
+    positionY -= speedY;
+  }
+  
+  public void bounce(){
+    if(positionX-(size/2) <= paddle[0].positionX + (paddle[0].p_width) //letf paddle
+      && positionY + (size/2) >= paddle[0].positionY 
+      && positionY - (size/2) <= paddle[0].positionY + paddle[0].p_height){
+        speedX = abs(speedX);
+        speedY = abs(speedX)*0.75*((paddle[0].positionY+(paddle[0].p_height/2)) - positionY)/50;
+      
+    }
+    if(positionX+(size/2) >= paddle[1].positionX //right paddle
+      && positionY + (size/2) >= paddle[1].positionY 
+      && positionY - (size/2) <= paddle[1].positionY + paddle[1].p_height){
+        speedX = 0 - abs(speedX);
+        speedY = abs(speedX)*0.75*((paddle[1].positionY+(paddle[1].p_height/2)) - positionY)/50;
+      
+    }
+    
   }
   
    
