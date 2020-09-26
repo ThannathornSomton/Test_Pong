@@ -1,27 +1,33 @@
 Ball ball;
 Paddle[] paddle;
 PongGame Game;
-int paddle_quantity = 2; 
+int paddle_quantity = 2;
+int ball_quantity = 1;
+
 void setup(){
   frameRate(60);
   size(800,600);
   textSize(32);
-  ball = new Ball(24,-5,0);
   Game = new PongGame();
+  ball = new Ball(24,-5,0);
   paddle = new Paddle[paddle_quantity];
-  for(int i = 0; i < paddle_quantity; i++){
-    paddle[i] = new Paddle(i);
-  }
+  paddle[0] = new Paddle(0);
+  paddle[1] = new Paddle(1);
+  
 
 }
 void draw(){
   Game.draw();
+
   
 }
+
 
 class Ball{
 
   float positionX,positionY,size,speedX,speedY;
+  int side;
+  boolean isOut = false;
   
   Ball(float a,float b,float c){
     positionX = width/2;
@@ -43,27 +49,48 @@ class Ball{
   }
   
   public void bounce(){
-    if(positionX-(size/2) <= paddle[0].positionX + (paddle[0].p_width) //letf paddle
-      && positionY + (size/2) >= paddle[0].positionY 
-      && positionY - (size/2) <= paddle[0].positionY + paddle[0].p_height){
-        speedX = abs(speedX);
-        speedY = abs(speedX)*0.75*((paddle[0].positionY+(paddle[0].p_height/2)) - positionY)/50;
-      
-    }
-    if(positionX+(size/2) >= paddle[1].positionX //right paddle
-      && positionY + (size/2) >= paddle[1].positionY 
-      && positionY - (size/2) <= paddle[1].positionY + paddle[1].p_height){
-        speedX = 0 - abs(speedX);
-        speedY = abs(speedX)*0.75*((paddle[1].positionY+(paddle[1].p_height/2)) - positionY)/50;
-      
+    if(positionX > 0 && positionX < width){
+      if(positionX-(size/2) <= paddle[0].positionX + (paddle[0].p_width)){ //left paddle
+        if(positionY + (size/2) >= paddle[0].positionY 
+          && positionY - (size/2) <= paddle[0].positionY + paddle[0].p_height){
+            speedX = abs(speedX);
+            speedY = abs(speedX)*0.75*((paddle[0].positionY+(paddle[0].p_height/2)) - positionY)/50;
+        }
+      }
+      if(positionX+(size/2) >= paddle[1].positionX){
+        if(positionY + (size/2) >= paddle[1].positionY 
+          && positionY - (size/2) <= paddle[1].positionY + paddle[1].p_height){
+            speedX = 0 - abs(speedX);
+            speedY = abs(speedX)*0.75*((paddle[1].positionY+(paddle[1].p_height/2)) - positionY)/50;
+        }
+      }
+    
+        if(positionY - size/2 <= 0){
+          speedY = 0 - abs(speedY);  
+        }
+    
+        if(positionY + size/2 >= height){
+          speedY = 0 + abs(speedY);  
+        }
+      }
+    else{
+      if(positionX < width/2){
+        side = 0;
+      }
+      if(positionX > width/2){
+        side = 1;
+      }
+      isOut = true;
     }
     
   }
-  
-   
-   
-  
-
+  public void reset_Out(){
+    isOut = false;
+  }
+  //public void set_speedXYto(){
+  //  SpeedX = 
+ //   speedY =
+ // }
 }
 
 class Paddle{
@@ -99,20 +126,33 @@ class Paddle{
 }
 class PongGame{
   
-  float score_0 = 0, score_1 = 0,direction;
+  int score_0 = 0, score_1 = 0;
   
   void draw(){
     background(0);
     fill(255);
     rect((width/2)-1,0,2,height);
-    for(int i = 0; i < 2; i++){
-     paddle[i].draw();
-    }
+    paddle[0].draw();
+    paddle[1].draw();
     ball.draw();
-
-    
-  
+    text(score_0, 190, 50);
+    text(score_1, 590, 50);
+    if(ball.isOut){
+      update(ball.side);
+    }
+     
   }
   
+  void update(int a){
+    if(a == 0){
+      score_1++;
+    }
+    if(a == 1){
+      score_0++;
+    }
+    ball.reset_Out();
+    ball = new Ball(24,5,0);
+    
+  }
   
 }
