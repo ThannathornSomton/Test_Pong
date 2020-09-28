@@ -42,7 +42,7 @@ class Ball{
         
   public void draw(){
     if(abs(speedX) < 12){
-      if(second() - sec == 1 ){
+      if(second() - sec >= 1 ){
         speedX = (speedX/abs(speedX))*(abs(speedX)+1);
         println(speedX);
         sec = second();
@@ -95,10 +95,7 @@ class Ball{
     }
     
   }
-  public void reset_Out(){
-    isOut = false;
-  }
-  
+
 }
 
 class Paddle{
@@ -182,7 +179,6 @@ class PongGame{
     if(a == 1){
       score_0++;
     }
-    ball.reset_Out();
     ball = new Ball(24);
   }
   
