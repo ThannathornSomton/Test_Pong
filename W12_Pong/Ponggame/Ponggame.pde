@@ -33,8 +33,6 @@ class Ball{
     size = a;
     speedX = random(0,4);
     speedY = random(0,4);
-    println(speedX);
-    println(speedY);
     if(speedX > 2){speedX = 3;}else{speedX = -3;}
     if(speedY > 2){speedY = 3;}else{speedY = -3;}
     sec = second();;
@@ -44,7 +42,6 @@ class Ball{
     if(abs(speedX) < 12){
       if(second() - sec >= 1 ){
         speedX = (speedX/abs(speedX))*(abs(speedX)+1);
-        println(speedX);
         sec = second();
       }
     }
@@ -61,18 +58,18 @@ class Ball{
   
   public void bounce(){
     if(positionX > 0 && positionX < width){
-      if(positionX-(size/2) <= paddle[0].positionX + (paddle[0].p_width)){ //left paddle
-        if(positionY + (size/2) >= paddle[0].positionY 
-          && positionY - (size/2) <= paddle[0].positionY + paddle[0].p_height){
+      if(positionX-(size/2) <= paddle[0].getX() + paddle[0].getW()){ //left paddle
+        if(positionY + (size/2) >= paddle[0].getY() 
+          && positionY - (size/2) <= paddle[0].getY() + paddle[0].getH()){
             speedX = abs(speedX);
-            speedY = abs(speedX)*0.75*((paddle[0].positionY+(paddle[0].p_height/2)) - positionY)/50;
+            speedY = abs(speedX)*0.75*((paddle[0].getY()+(paddle[0].getH()/2)) - positionY)/50;
         }
       }
-      if(positionX+(size/2) >= paddle[1].positionX){
-        if(positionY + (size/2) >= paddle[1].positionY 
-          && positionY - (size/2) <= paddle[1].positionY + paddle[1].p_height){
+      if(positionX+(size/2) >= paddle[1].getX()){
+        if(positionY + (size/2) >= paddle[1].getY() 
+          && positionY - (size/2) <= paddle[1].getY() + paddle[1].getH()){
             speedX = 0 - abs(speedX);
-            speedY = abs(speedX)*0.75*((paddle[1].positionY+(paddle[1].p_height/2)) - positionY)/50;
+            speedY = abs(speedX)*0.75*((paddle[1].getY()+(paddle[1].getH()/2)) - positionY)/50;
         }
       }
     
@@ -127,6 +124,22 @@ class Paddle{
   }
   rect(positionX,positionY,p_width,p_height);
   }
+  
+  public float getX(){
+    return positionX;
+  }
+
+  public float getY(){
+    return positionY;
+  }
+  
+  public float getH(){
+    return p_height;
+  }
+  
+  public float getW(){
+    return p_width;
+  }
 
 }
 class PongGame{
@@ -159,11 +172,11 @@ class PongGame{
     else{
       bg_color = 100;
       text(display_text, 280, 300);
-      if(second() - sec == 1 ){
+      if(second() - sec >= 1 ){
         sec2++;
         sec = second();
       }
-      if(sec2 > 3){
+      if(sec2 >= 3){
         run = true;
         sec2 = 0;
         restart();
