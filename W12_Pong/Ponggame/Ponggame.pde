@@ -1,5 +1,5 @@
 Ball ball;
-Paddle[] paddle;
+Paddle paddle;
 PongGame Game;
 
 void setup(){
@@ -8,9 +8,8 @@ void setup(){
   textSize(32);
   Game = new PongGame();
   ball = new Ball(24);
-  paddle = new Paddle[2];
-  paddle[0] = new Paddle(0);
-  paddle[1] = new Paddle(1);
+  paddle = new Paddle(1);
+
   
 
 }
@@ -58,18 +57,16 @@ class Ball{
   
   public void bounce(){
     if(positionX > 0 && positionX < width){
-      if(positionX-(size/2) <= paddle[0].getX() + paddle[0].getW()){ //left paddle
-        if(positionY + (size/2) >= paddle[0].getY() 
-          && positionY - (size/2) <= paddle[0].getY() + paddle[0].getH()){
-            speedX = abs(speedX);
-            speedY = abs(speedX)*0.75*((paddle[0].getY()+(paddle[0].getH()/2)) - positionY)/50;
-        }
+      if(positionX-(size/2) <= 0){
+        speedX = 0 + abs(speedX);
       }
-      if(positionX+(size/2) >= paddle[1].getX()){
-        if(positionY + (size/2) >= paddle[1].getY() 
-          && positionY - (size/2) <= paddle[1].getY() + paddle[1].getH()){
+        
+      
+      if(positionX+(size/2) >= paddle.getX()){
+        if(positionY + (size/2) >= paddle.getY() 
+          && positionY - (size/2) <= paddle.getY() + paddle.getH()){
             speedX = 0 - abs(speedX);
-            speedY = abs(speedX)*0.75*((paddle[1].getY()+(paddle[1].getH()/2)) - positionY)/50;
+            speedY = abs(speedX)*0.75*((paddle.getY()+(paddle.getH()/2)) - positionY)/50;
         }
       }
     
@@ -158,8 +155,8 @@ class PongGame{
     background(bg_color);
     fill(255);
     rect((width/2)-1,0,2,height);
-    paddle[0].draw();
-    paddle[1].draw();
+    paddle.draw();
+
     text(score_0, 190, 50);
     text(score_1, 590, 50);
     if(ball.isOut){
