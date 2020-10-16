@@ -27,8 +27,8 @@ class Ball{
   boolean isOut = false;
   
   Ball(float a){
-    positionX = width/2;
-    positionY = height/2;
+    positionX = random(width/2 - 200, width/2 + 200);
+    positionY = random(height/2 - 200, height/2 + 200);
     size = a;
     speedX = random(0,4);
     speedY = random(0,4);
